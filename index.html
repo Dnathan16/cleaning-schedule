@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bobby and Danielle's Cleaning Schedule</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f1eb;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f5f1eb;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .auth-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            font-size: 1.2em;
+            color: #718096;
+            margin-bottom: 30px;
+        }
+
+        .auth-button {
+            background: linear-gradient(135deg, #ff8c42, #ffa366);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #6cb8a8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .user-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-top: 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #718096;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .cleaning-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .bucket { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 30h60l-8 50H28z" fill="%23ff8c42"/><path d="M15 25h70a5 5 0 010 10H15a5 5 0 010-10z" fill="%236cb8a8"/><circle cx="50" cy="20" r="8" fill="white" opacity="0.8"/></svg>'); }
+        .towel { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="40" rx="5" fill="%236cb8a8"/><rect x="22" y="22" width="56" height="36" rx="3" fill="%2388c5b5"/></svg>'); }
+        .spray { background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="30" y="40" width="25" height="40" rx="3" fill="%236cb8a8"/><rect x="55" y="35" width="15" height="15" rx="2" fill="%23ffd23f"/><circle cx="70" cy="25" r="3" fill="%236cb8a8"/><circle cx="75" cy="20" r="2" fill="%236cb8a8"/><circle cx="80" cy="25" r="2" fill="%236cb8a8"/></svg>'); }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .day-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+            border-color: #ff8c42;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff8c42, #ffa366);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .day-header {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            background: #f8fafc;
+        }
+
+        .task-item:hover {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(4px);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 16px;
+            accent-color: #ff8c42;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .task-text {
+            color: #4a5568;
+            font-size: 0.95em;
+            font-weight: 500;
+            flex-grow: 1;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+        }
+
+        .task-checkbox:checked + .task-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+            color: #a0aec0;
+        }
+
+        .others-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid #e2e8f0;
+            margin-top: 24px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .others-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6cb8a8, #88c5b5);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .others-header {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .others-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #edf2f7;
+            border-radius: 3px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff8c42, #ffa366);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .cat-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .flash-message {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff8c42, #ffa366);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(255, 140, 66, 0.3);
+            z-index: 1000;
+            max-width: 400px;
+            text-align: center;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .flash-message.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .flash-message .cat-emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+
+        .cat-1 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="75" rx="28" ry="22" fill="white"/><ellipse cx="50" cy="75" rx="28" ry="22" fill="%23ff8c42" mask="url(%23orangePattern1)"/><circle cx="50" cy="52" r="22" fill="white"/><circle cx="50" cy="52" r="22" fill="%23ff8c42" mask="url(%23orangePattern2)"/><defs><mask id="orangePattern1"><rect width="100" height="100" fill="white"/><rect x="20" y="60" width="12" height="30" fill="black"/><rect x="40" y="55" width="8" height="35" fill="black"/><rect x="55" y="60" width="15" height="30" fill="black"/></mask><mask id="orangePattern2"><rect width="100" height="100" fill="white"/><rect x="25" y="35" width="10" height="25" fill="black"/><rect x="45" y="30" width="8" height="30" fill="black"/><rect x="65" y="40" width="12" height="20" fill="black"/></mask></defs><path d="M33 38l12-18 8 18z" fill="%23ff8c42"/><path d="M67 38l-12-18-8 18z" fill="%23ff8c42"/><circle cx="42" cy="47" r="2" fill="black"/><circle cx="58" cy="47" r="2" fill="black"/><ellipse cx="50" cy="53" rx="2" ry="1" fill="black"/><path d="M47 57l3 4 3-4" stroke="black" stroke-width="1.5" fill="none"/><path d="M40 55c0 4 4 6 8 6" stroke="black" stroke-width="1" fill="none"/><path d="M60 55c0 4-4 6-8 6" stroke="black" stroke-width="1" fill="none"/></svg>');
+            top: 10px;
+            left: 10px;
+        }
+
+        .cat-2 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="75" rx="28" ry="22" fill="%23ff8c42"/><circle cx="50" cy="52" r="22" fill="%23ff8c42"/><path d="M33 38l12-18 8 18z" fill="%23ff8c42"/><path d="M67 38l-12-18-8 18z" fill="%23ff8c42"/><circle cx="42" cy="47" r="2" fill="black"/><circle cx="58" cy="47" r="2" fill="black"/><ellipse cx="50" cy="53" rx="2" ry="1" fill="black"/><path d="M47 57l3 4 3-4" stroke="black" stroke-width="1.5" fill="none"/><path d="M40 55c0 4 4 6 8 6" stroke="black" stroke-width="1" fill="none"/><path d="M60 55c0 4-4 6-8 6" stroke="black" stroke-width="1" fill="none"/><ellipse cx="75" cy="45" rx="15" ry="35" fill="%23ff8c42"/></svg>');
+            top: 10px;
+            right: 10px;
+        }
+
+        .cat-3 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="75" rx="28" ry="22" fill="%23ffb366"/><circle cx="50" cy="52" r="22" fill="%23ffb366"/><ellipse cx="50" cy="60" rx="18" ry="25" fill="white"/><ellipse cx="50" cy="45" rx="12" ry="15" fill="white"/><path d="M33 38l12-18 8 18z" fill="%23ffb366"/><path d="M67 38l-12-18-8 18z" fill="%23ffb366"/><circle cx="42" cy="47" r="2" fill="black"/><circle cx="58" cy="47" r="2" fill="black"/><ellipse cx="50" cy="53" rx="2" ry="1" fill="black"/><path d="M47 57l3 4 3-4" stroke="black" stroke-width="1.5" fill="none"/><path d="M40 55c0 4 4 6 8 6" stroke="black" stroke-width="1" fill="none"/><path d="M60 55c0 4-4 6-8 6" stroke="black" stroke-width="1" fill="none"/></svg>');
+            bottom: 60px;
+            left: 10px;
+        }
+
+        .cat-4 {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="35" cy="75" rx="25" ry="20" fill="%23ff8c42"/><circle cx="35" cy="52" r="20" fill="%23ff8c42"/><path d="M20 38l10-15 7 15z" fill="%23ff8c42"/><path d="M50 38l-10-15-7 15z" fill="%23ff8c42"/><circle cx="28" cy="47" r="2" fill="black"/><circle cx="42" cy="47" r="2" fill="black"/><ellipse cx="35" cy="53" rx="2" ry="1" fill="black"/><path d="M32 57l3 4 3-4" stroke="black" stroke-width="1.5" fill="none"/><path d="M25 55c0 4 4 6 8 6" stroke="black" stroke-width="1" fill="none"/><path d="M45 55c0 4-4 6-8 6" stroke="black" stroke-width="1" fill="none"/><ellipse cx="75" cy="60" rx="8" ry="15" fill="%23ffd23f"/><rect x="60" y="45" width="30" height="8" rx="4" fill="%23ffd23f"/><circle cx="85" cy="40" r="3" fill="%23ffd23f"/><circle cx="90" cy="50" r="2" fill="%23ffd23f"/><circle cx="80" cy="55" r="2" fill="%23ffd23f"/></svg>');
+            bottom: 10px;
+            right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+                margin-top: 60px;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cleaning-icons {
+                gap: 15px;
+            }
+            
+            .icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-info, .logout-button {
+                position: relative;
+                top: auto;
+                left: auto;
+                right: auto;
+                margin: 10px auto;
+                display: block;
+                width: fit-content;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="flash-message" id="flashMessage">
+        <span class="cat-emoji">🐱</span>
+        <span id="flashText"></span>
+    </div>
+
+    <!-- Authentication Screen -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-card">
+            <h1 class="auth-title">🐱 Cleaning Schedule</h1>
+            <p class="auth-subtitle">Sign in to access Bobby and Danielle's cleaning schedule</p>
+            <button class="auth-button" onclick="netlifyIdentity.open('login')">
+                Sign in with GitHub
+            </button>
+        </div>
+    </div>
+
+    <!-- Main App (hidden by default) -->
+    <div id="mainApp" class="hidden">
+        <div class="user-info" id="userInfo"></div>
+        <button class="logout-button" onclick="netlifyIdentity.logout()">Logout</button>
+        
+        <div class="container">
+            <div class="cat-decoration cat-1"></div>
+            <div class="cat-decoration cat-2"></div>
+            <div class="cat-decoration cat-3"></div>
+            <div class="cat-decoration cat-4"></div>
+            
+            <div class="header">
+                <h1 class="title">Bobby and Danielle's Cleaning Schedule</h1>
+                <p class="subtitle">Keeping our home purr-fect, one task at a time!</p>
+                <div class="cleaning-icons">
+                    <div class="icon bucket"></div>
+                    <div class="icon towel"></div>
+                    <div class="icon spray"></div>
+                </div>
+            </div>
+
+            <div class="schedule-grid">
+                <div class="day-card">
+                    <h2 class="day-header">Monday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="mon1">
+                            <label class="task-text" for="mon1">Change Litter Bag</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="mon2">
+                            <label class="task-text" for="mon2">Take Garbage Out</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="mon3">
+                            <label class="task-text" for="mon3">Clean Desk</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="mon4">
+                            <label class="task-text" for="mon4">Clean Countertop</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="mon5">
+                            <label class="task-text" for="mon5">Run and Empty Dishwasher</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Tuesday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue1">
+                            <label class="task-text" for="tue1">Vacuum</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue2">
+                            <label class="task-text" for="tue2">Sweep</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue3">
+                            <label class="task-text" for="tue3">Clean Desk</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue4">
+                            <label class="task-text" for="tue4">Clean Countertop</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue5">
+                            <label class="task-text" for="tue5">Check Litter Level</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="tue6">
+                            <label class="task-text" for="tue6">Run and Empty Dishwasher</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Wednesday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed1">
+                            <label class="task-text" for="wed1">Clean Out Fridge</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed2">
+                            <label class="task-text" for="wed2">Restock Groceries</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed3">
+                            <label class="task-text" for="wed3">Take Out Garbage</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed4">
+                            <label class="task-text" for="wed4">Clean Desk</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed5">
+                            <label class="task-text" for="wed5">Clean Counters</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="wed6">
+                            <label class="task-text" for="wed6">Run and Empty Dishwasher</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Thursday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu1">
+                            <label class="task-text" for="thu1">Change Litter Bag</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu2">
+                            <label class="task-text" for="thu2">Take Out Garbage</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu3">
+                            <label class="task-text" for="thu3">Vacuum</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu4">
+                            <label class="task-text" for="thu4">Clean Desk</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu5">
+                            <label class="task-text" for="thu5">Clean Countertop</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="thu6">
+                            <label class="task-text" for="thu6">Run and Empty Dishwasher</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Friday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="fri1">
+                            <label class="task-text" for="fri1">Sweep/Mop</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="fri2">
+                            <label class="task-text" for="fri2">Clean Desk</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="fri3">
+                            <label class="task-text" for="fri3">Clean Countertop</label>
