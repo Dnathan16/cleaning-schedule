@@ -579,3 +579,229 @@
                         <li class="task-item">
                             <input type="checkbox" class="task-checkbox" id="fri3">
                             <label class="task-text" for="fri3">Clean Countertop</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="fri4">
+                            <label class="task-text" for="fri4">Run and Empty Dishwasher</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Saturday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sat1">
+                            <label class="task-text" for="sat1">Vacuum</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sat2">
+                            <label class="task-text" for="sat2">Deep Clean Kitchen</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sat3">
+                            <label class="task-text" for="sat3">Clean Bathroom</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sat4">
+                            <label class="task-text" for="sat4">Change Litter Bag</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sat5">
+                            <label class="task-text" for="sat5">Take Garbage Out</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="day-card">
+                    <h2 class="day-header">Sunday</h2>
+                    <ul class="task-list">
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sun1">
+                            <label class="task-text" for="sun1">Organize Weekly Pills</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sun2">
+                            <label class="task-text" for="sun2">Clean Bedroom</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sun3">
+                            <label class="task-text" for="sun3">Change Sheets</label>
+                        </li>
+                        <li class="task-item">
+                            <input type="checkbox" class="task-checkbox" id="sun4">
+                            <label class="task-text" for="sun4">Check Litter Levels</label>
+                        </li>
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="others-section">
+                <h2 class="others-header">Others</h2>
+                <div class="others-grid">
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="other1">
+                        <label class="task-text" for="other1">Laundry</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="other2">
+                        <label class="task-text" for="other2">Deep Clean Robot</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="other3">
+                        <label class="task-text" for="other3">Clean Closets</label>
+                    </div>
+                    <div class="task-item">
+                        <input type="checkbox" class="task-checkbox" id="other4">
+                        <label class="task-text" for="other4">Clean Out Pantry</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const catFacts = [
+            "Cats have 32 muscles in each ear, allowing them to rotate their ears 180 degrees!",
+            "A cat's purr vibrates at a frequency that can help heal bones and reduce pain.",
+            "Cats sleep 12-16 hours a day to conserve energy for hunting... or playing!",
+            "A group of cats is called a 'clowder' and a group of kittens is called a 'kindle'.",
+            "Cats have a third eyelid called a 'nictitating membrane' that helps protect their eyes.",
+            "A cat can jump up to six times its length, making them incredible athletes!",
+            "Cats have scent glands in their cheeks, forehead, and paws for marking territory.",
+            "The oldest known pet cat existed 9,000 years ago in Cyprus!",
+            "Cats can make over 100 different sounds, while dogs only make about 10.",
+            "A cat's nose is as unique as a human fingerprint - no two are exactly alike!",
+            "Cats have excellent night vision and can see at light levels six times lower than humans.",
+            "When cats knead with their paws, they're showing affection learned from nursing.",
+            "Cats have a specialized collarbone that allows them to always land on their feet.",
+            "A cat's whiskers are roughly as wide as their body, helping them gauge tight spaces.",
+            "Cats can be right-pawed or left-pawed, just like humans are right or left-handed!",
+            "Ancient Egyptians worshipped cats and considered killing one a capital offense.",
+            "Cats have been to space! In 1963, France sent a cat named Félicette into space.",
+            "A cat's brain is 90% similar to a human's brain, more than any other animal!",
+            "Cats can run up to 30 mph when they really need to get somewhere fast.",
+            "House cats share 95.6% of their genetic makeup with tigers - they're basically tiny tigers!"
+        ];
+
+        let usedFacts = [];
+
+        function getRandomCatFact() {
+            if (usedFacts.length === catFacts.length) {
+                usedFacts = []; // Reset if all facts have been used
+            }
+            
+            let availableFacts = catFacts.filter((fact, index) => !usedFacts.includes(index));
+            let randomIndex = Math.floor(Math.random() * availableFacts.length);
+            let fact = availableFacts[randomIndex];
+            let originalIndex = catFacts.indexOf(fact);
+            usedFacts.push(originalIndex);
+            
+            return fact;
+        }
+
+        function showFlashMessage(message) {
+            const flashMessage = document.getElementById('flashMessage');
+            const flashText = document.getElementById('flashText');
+            
+            flashText.textContent = message;
+            flashMessage.classList.add('show');
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                flashMessage.classList.remove('show');
+            }, 4000);
+        }
+
+        function updateProgressBar(dayCard) {
+            const checkboxes = dayCard.querySelectorAll('.task-checkbox');
+            const progressFill = dayCard.querySelector('.progress-fill');
+            const total = checkboxes.length;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percentage = (checked / total) * 100;
+            progressFill.style.width = percentage + '%';
+        }
+
+        // Authentication handling
+        function initializeApp() {
+            const user = netlifyIdentity.currentUser();
+            if (user) {
+                // User is logged in, show the app
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                document.getElementById('userInfo').textContent = `Welcome, ${user.user_metadata.full_name || user.email}!`;
+                
+                // Initialize the cleaning schedule functionality
+                initializeCleaningSchedule();
+            } else {
+                // User is not logged in, show auth screen
+                document.getElementById('authScreen').classList.remove('hidden');
+                document.getElementById('mainApp').classList.add('hidden');
+            }
+        }
+
+        function initializeCleaningSchedule() {
+            // Add event listeners to all checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    const dayCard = this.closest('.day-card') || this.closest('.others-section');
+                    if (dayCard && dayCard.classList.contains('day-card')) {
+                        updateProgressBar(dayCard);
+                    }
+                    
+                    // Show cat fact when task is completed (checked)
+                    if (this.checked) {
+                        const catFact = getRandomCatFact();
+                        showFlashMessage(catFact);
+                    }
+                });
+            });
+
+            // Add some subtle animations to the cat decorations
+            function animateCats() {
+                const cats = document.querySelectorAll('.cat-decoration');
+                cats.forEach((cat, index) => {
+                    setTimeout(() => {
+                        cat.style.transform = 'translateY(-5px)';
+                        setTimeout(() => {
+                            cat.style.transform = 'translateY(0)';
+                        }, 1000);
+                    }, index * 500);
+                });
+            }
+
+            // Animate cats on app load
+            setTimeout(animateCats, 1000);
+            setInterval(animateCats, 10000); // Repeat every 10 seconds
+
+            // Add transition to cat decorations
+            document.querySelectorAll('.cat-decoration').forEach(cat => {
+                cat.style.transition = 'transform 1s ease-in-out';
+            });
+        }
+
+        // Netlify Identity event handlers
+        if (typeof netlifyIdentity !== 'undefined') {
+            netlifyIdentity.on('init', initializeApp);
+            netlifyIdentity.on('login', initializeApp);
+            netlifyIdentity.on('logout', initializeApp);
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof netlifyIdentity !== 'undefined') {
+                netlifyIdentity.init();
+            }
+        });
+    </script>
+</body>
+</html>
